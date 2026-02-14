@@ -55,3 +55,44 @@
 
 </body>
 </html>
+<section id="classes">
+    <h2>Sınıf Seviyeleri</h2>
+    <p>İlgilendiğiniz sınıfı seçerek içeriklere ulaşabilirsiniz:</p>
+    
+    <div class="class-grid">
+        <div class="class-card"><h3>5. Sınıf</h3><p>Temel Dersler & Etkinlikler</p></div>
+        <div class="class-card"><h3>6. Sınıf</h3><p>Konu Anlatımları</p></div>
+        <div class="class-card"><h3>7. Sınıf</h3><p>Hazırlık Soruları</p></div>
+        <div class="class-card"><h3>8. Sınıf</h3><p>LGS Hazırlık & Denemeler</p></div>
+
+        <div class="class-card lise"><h3>9. Sınıf</h3><p>Liseye Merhaba</p></div>
+        <div class="class-card lise"><h3>10. Sınıf</h3><p>Alan Seçimi & Dersler</p></div>
+        <div class="class-card lise"><h3>11. Sınıf</h3><p>AYT/TYT Temel</p></div>
+        <div class="class-card lise"><h3>12. Sınıf</h3><p>YKS Maratonu</p></div>
+    </div>
+</section>
+
+<style>
+    .class-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .class-card {
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        transition: transform 0.3s ease, background 0.3s;
+        border-bottom: 4px solid #3498db;
+        cursor: pointer;
+    }
+    .class-card:hover {
+        transform: translateY(-5px);
+        background: #dbe4e7;
+    }
+    .class-card h3 { margin: 0; color: #2c3e50; }
+    .class-card p { font-size: 0.8rem; color: #666; margin: 5px 0 0; }
+    .lise { border-bottom-color: #e67e22; } /* Lise sınıfları için farklı renk */
+</style>
