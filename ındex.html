@@ -96,3 +96,137 @@
     .class-card p { font-size: 0.8rem; color: #666; margin: 5px 0 0; }
     .lise { border-bottom-color: #e67e22; } /* Lise sınıfları için farklı renk */
 </style>
+
+
+<section id="classes">
+    <h2>Sınıf Seviyeleri ve Dersler</h2>
+    <p>Ders içeriklerine ulaşmak için ilgili sınıfı inceleyin:</p>
+    
+    <div class="class-grid">
+        <div class="class-card">
+            <h3>5. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fen Bilimleri</li>
+                <li>Türkçe</li>
+                <li>Sosyal Bilgiler</li>
+                <li>İngilizce</li>
+            </ul>
+        </div>
+
+        <div class="class-card">
+            <h3>6. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fen Bilimleri</li>
+                <li>Türkçe</li>
+                <li>Sosyal Bilgiler</li>
+                <li>İngilizce</li>
+            </ul>
+        </div>
+
+        <div class="class-card">
+            <h3>7. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fen Bilimleri</li>
+                <li>Türkçe</li>
+                <li>Sosyal Bilgiler</li>
+                <li>İngilizce</li>
+            </ul>
+        </div>
+
+        <div class="class-card">
+            <h3>8. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fen Bilimleri</li>
+                <li>Türkçe</li>
+                <li>İnkılap Tarihi</li>
+                <li>İngilizce</li>
+            </ul>
+        </div>
+
+        <div class="class-card lise">
+            <h3>9. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fizik</li>
+                <li>Kimya</li>
+                <li>Biyoloji</li>
+                <li>Edebiyat</li>
+            </ul>
+        </div>
+
+        <div class="class-card lise">
+            <h3>10. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fizik</li>
+                <li>Kimya</li>
+                <li>Biyoloji</li>
+                <li>Edebiyat</li>
+            </ul>
+        </div>
+
+        <div class="class-card lise">
+            <h3>11. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fizik</li>
+                <li>Kimya</li>
+                <li>Biyoloji</li>
+                <li>Edebiyat</li>
+            </ul>
+        </div>
+
+        <div class="class-card lise">
+            <h3>12. Sınıf</h3>
+            <ul class="lesson-list">
+                <li>Matematik</li>
+                <li>Fizik</li>
+                <li>Kimya</li>
+                <li>Biyoloji</li>
+                <li>Edebiyat</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<style>
+    .class-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .class-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        border-top: 5px solid #3498db;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+    .class-card:hover { transform: scale(1.02); }
+    .class-card.lise { border-top-color: #e67e22; }
+    
+    .lesson-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 15px;
+        text-align: left;
+    }
+    .lesson-list li {
+        padding: 5px 0;
+        border-bottom: 1px dotted #ddd;
+        font-size: 0.9rem;
+        color: #555;
+    }
+    .lesson-list li:last-child { border-bottom: none; }
+    
+    .lesson-list li::before {
+        content: "📚 ";
+        font-size: 0.8rem;
+    }
+</style>
