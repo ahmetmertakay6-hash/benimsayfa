@@ -442,3 +442,200 @@
     }
 </style>
 
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitim Portalım | [Adın Soyadın]</title>
+    <style>
+        /* GENEL TASARIM */
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; background-color: #f0f2f5; color: #333; }
+        header { background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; padding: 3rem 1rem; text-align: center; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 20px; }
+        h2 { border-left: 5px solid #3498db; padding-left: 15px; margin-top: 40px; }
+
+        /* SINIF KARTLARI (GRID) */
+        .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .class-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; border-top: 6px solid #3498db; }
+        .class-card.lise { border-top-color: #e67e22; }
+        .class-card:hover { transform: translateY(-5px); }
+
+        /* DERS BUTONLARI VE NOTLAR */
+        .lesson-container { margin-top: 15px; }
+        .lesson-btn { 
+            background: #f8f9fa; border: 1px solid #ddd; width: 100%; text-align: left;
+            padding: 12px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; font-weight: 600;
+        }
+        .lesson-btn:hover { background: #eef2f7; }
+        .lesson-content { 
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; 
+            background: #fff; border-radius: 0 0 8px 8px; padding: 0 10px;
+        }
+        .links { display: flex; gap: 10px; padding: 10px 0; }
+        .btn-sm { padding: 6px 12px; border-radius: 5px; text-decoration: none; color: white; font-size: 0.8rem; font-weight: bold; }
+        .video { background: #e74c3c; }
+        .test { background: #2ecc71; }
+
+        /* TEST PENCERESİ (MODAL) */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 20px; width: 90%; max-width: 500px; position: relative; }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 25px; cursor: pointer; }
+        .question { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        #submit-btn { background: #3498db; color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; cursor: pointer; font-size: 1rem; }
+        #quiz-result { margin-top: 20px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #27ae60; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🚀 Dijital Öğrenme Platformu</h1>
+    <p>5. Sınıftan 12. Sınıfa Kadar Tüm Ders Notları ve Testler</p>
+</header>
+
+<div class="container">
+    <div class="class-grid">
+        
+        <div class="class-card">
+            <h3>5. Sınıf</h3>
+            <div class="lesson-container">
+                <button class="lesson-btn" onclick="toggleNote(this)">🔢 Matematik</button>
+                <div class="lesson-content">
+                    <p>Konu: Milyonlar ve Kesirler</p>
+                    <div class="links">
+                        <a href="#" class="btn-sm video">🎥 İzle</a>
+                        <a href="javascript:void(0)" onclick="openQuiz('Matematik')" class="btn-sm test">✍️ Test Çöz</a>
+                    </div>
+                </div>
+
+                <button class="lesson-btn" onclick="toggleNote(this)">🧪 Fen Bilimleri</button>
+                <div class="lesson-content">
+                    <p>Konu: Ay'ın Evreleri</p>
+                    <div class="links">
+                        <a href="#" class="btn-sm video">🎥 İzle</a>
+                        <a href="javascript:void(0)" onclick="openQuiz('Fen Bilimleri')" class="btn-sm test">✍️ Test Çöz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="class-card">
+            <h3>8. Sınıf (LGS)</h3>
+            <div class="lesson-container">
+                <button class="lesson-btn" onclick="toggleNote(this)">📐 Matematik</button>
+                <div class="lesson-content">
+                    <p>Konu: Çarpanlar ve Katlar</p>
+                    <div class="links">
+                        <a href="#" class="btn-sm video">🎥 İzle</a>
+                        <a href="javascript:void(0)" onclick="openQuiz('Matematik')" class="btn-sm test">✍️ Test Çöz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="class-card lise">
+            <h3>12. Sınıf (YKS)</h3>
+            <div class="lesson-container">
+                <button class="lesson-btn" onclick="toggleNote(this)">🖋️ Edebiyat</button>
+                <div class="lesson-content">
+                    <p>Konu: Cumhuriyet Dönemi</p>
+                    <div class="links">
+                        <a href="#" class="btn-sm video">🎥 İzle</a>
+                        <a href="javascript:void(0)" onclick="openQuiz('Edebiyat')" class="btn-sm test">✍️ Test Çöz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="quiz-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeQuiz()">&times;</span>
+        <h2 id="quiz-title" style="border:none; text-align:center;">Test</h2>
+        <div id="question-container"></div>
+        <button id="submit-btn" onclick="checkAnswers()">Testi Tamamla</button>
+        <div id="quiz-result"></div>
+    </div>
+</div>
+
+<script>
+    // NOTLARI AÇMA/KAPAMA
+    function toggleNote(btn) {
+        btn.classList.toggle("active");
+        var content = btn.nextElementSibling;
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    }
+
+    // TEST VERİLERİ
+    const quizData = {
+        "Matematik": [
+            { q: "25 x 4 kaçtır?", a: ["80", "100", "120"], c: 1 },
+            { q: "En küçük asal sayı nedir?", a: ["1", "2", "3"], c: 1 },
+            { q: "Hangi sayı 9'a bölünür?", a: ["81", "73", "44"], c: 0 },
+            { q: "4'ün küpü kaçtır?", a: ["16", "64", "32"], c: 1 },
+            { q: "Hangi sayı çifttir?", a: ["15", "22", "33"], c: 1 }
+        ],
+        "Fen Bilimleri": [
+            { q: "Dünyanın uydusu nedir?", a: ["Güneş", "Ay", "Mars"], c: 1 },
+            { q: "H2O nedir?", a: ["Tuz", "Hava", "Su"], c: 2 },
+            { q: "Hangisi omurgalıdır?", a: ["Balık", "Solucan", "Sinek"], c: 0 },
+            { q: "Mevsimler neden oluşur?", a: ["Eksen Eğikliği", "Ayın Dönüşü", "Rüzgar"], c: 0 },
+            { q: "Işık hızı sesten hızlı mıdır?", a: ["Evet", "Hayır", "Eşit"], c: 0 }
+        ],
+        "Edebiyat": [
+            { q: "Şair Evlenmesi kimin eseridir?", a: ["Şinasi", "Namık Kemal", "Ziya Paşa"], c: 0 },
+            { q: "Hangisi bir roman türüdür?", a: ["Lirik", "Polisiye", "Pastoral"], c: 1 },
+            { q: "İlk yerli romanımız?", a: ["Araba Sevdası", "Taaşşuk-ı Talat", "Eylül"], c: 1 },
+            { q: "Mai ve Siyah yazarı?", a: ["Halit Ziya", "Mehmet Rauf", "Ömer Seyfettin"], c: 0 },
+            { q: "Hangisi kafiye türüdür?", a: ["Yarım", "Geniş", "Uzun"], c: 0 }
+        ]
+    };
+
+    function openQuiz(lesson) {
+        const modal = document.getElementById('quiz-modal');
+        const container = document.getElementById('question-container');
+        const title = document.getElementById('quiz-title');
+        
+        title.innerText = lesson + " Testi";
+        container.innerHTML = "";
+        document.getElementById('quiz-result').innerText = "";
+        
+        const questions = quizData[lesson] || quizData["Matematik"];
+        
+        questions.forEach((item, index) => {
+            let html = `<div class="question"><p><b>${index+1}. ${item.q}</b></p>`;
+            item.a.forEach((opt, i) => {
+                html += `<label style="display:block;"><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`;
+            });
+            html += `</div>`;
+            container.innerHTML += html;
+        });
+        
+        modal.style.display = "block";
+        modal.dataset.lesson = lesson;
+    }
+
+    function closeQuiz() { document.getElementById('quiz-modal').style.display = "none"; }
+
+    function checkAnswers() {
+        const lesson = document.getElementById('quiz-modal').dataset.lesson;
+        const questions = quizData[lesson] || quizData["Matematik"];
+        let score = 0;
+        
+        questions.forEach((item, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (selected && parseInt(selected.value) === item.c) score++;
+        });
+        
+        document.getElementById('quiz-result').innerText = `Tebrikler! 5 soruda ${score} doğru yaptın.`;
+    }
+</script>
+
+</body>
+</html>
