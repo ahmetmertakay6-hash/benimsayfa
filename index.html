@@ -1007,3 +1007,95 @@
 
 </body>
 </html>
+<div class="game-section" style="background: #111; color: white; padding: 30px; border-radius: 20px; margin-top: 50px; text-align: center; border: 2px solid #3498db;">
+    <h2 style="color: #3498db; border: none; margin-bottom: 20px;">🎮 Mola Zamanı: Mini Pac-Man</h2>
+    
+    <canvas id="pacmanCanvas" width="400" height="400" style="background: #000; border: 2px solid #444; border-radius: 10px;"></canvas>
+    
+    <br>
+    
+    <button id="singleStartBtn" style="background: #3498db; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; margin-top: 15px; font-weight: bold; box-shadow: 0 4px #2980b9;">
+        OYUNU BAŞLAT
+    </button>
+    
+    <p style="margin-top: 15px; color: #888; font-size: 0.9rem;">Ok tuşlarıyla sarı Pac-Man'i yönet, kırmızı hayaletten kaç!</p>
+</div>
+
+<script>
+    // Çakışmaları önlemek için her şeyi bir fonksiyon içine alıyoruz
+    (function() {
+        window.addEventListener('load', function() {
+            const canvas = document.getElementById("pacmanCanvas");
+            const ctx = canvas.getContext("2d");
+            const startBtn = document.getElementById("singleStartBtn");
+
+            let player = { x: 200, y: 200, s: 15, spd: 5 };
+            let ghost = { x: 50, y: 50, s: 15, spd: 2.5 };
+            let gameActive = false;
+            let animationId;
+
+            function update() {
+                if (!gameActive) return;
+
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Hayalet takibi
+                let dx = player.x - ghost.x;
+                let dy = player.y - ghost.y;
+                let angle = Math.atan2(dy, dx);
+                ghost.x += Math.cos(angle) * ghost.spd;
+                ghost.y += Math.sin(angle) * ghost.spd;
+
+                // Pac-Man çizimi
+                ctx.fillStyle = "#f1c40f";
+                ctx.beginPath();
+                ctx.arc(player.x, player.y, player.s, 0.2 * Math.PI, 1.8 * Math.PI);
+                ctx.lineTo(player.x, player.y);
+                ctx.fill();
+
+                // Hayalet çizimi
+                ctx.fillStyle = "#e74c3c";
+                ctx.beginPath();
+                ctx.arc(ghost.x, ghost.y, ghost.s, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Çarpışma kontrolü
+                let distance = Math.hypot(player.x - ghost.x, player.y - ghost.y);
+                if (distance < (player.s + ghost.s)) {
+                    gameActive = false;
+                    cancelAnimationFrame(animationId);
+                    alert("YAKALANDIN! 👻");
+                    return;
+                }
+
+                // Sınırlar
+                if(player.x < 15) player.x = 15; if(player.x > 385) player.x = 385;
+                if(player.y < 15) player.y = 15; if(player.y > 385) player.y = 385;
+
+                animationId = requestAnimationFrame(update);
+            }
+
+            startBtn.addEventListener("click", function() {
+                gameActive = true;
+                player = { x: 200, y: 200, s: 15, spd: 5 };
+                ghost = { x: 50, y: 50, s: 15, spd: 2.5 };
+                if(animationId) cancelAnimationFrame(animationId);
+                update();
+                startBtn.innerText = "OYUNU YENİLE";
+            });
+
+            window.addEventListener("keydown", function(e) {
+                if (!gameActive) return;
+                if (e.key === "ArrowUp") player.y -= player.spd;
+                if (e.key === "ArrowDown") player.y += player.spd;
+                if (e.key === "ArrowLeft") player.x -= player.spd;
+                if (e.key === "ArrowRight") player.x += player.spd;
+                
+                if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    })();
+</script>
