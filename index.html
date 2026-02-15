@@ -965,49 +965,7 @@
         ]
     };
 
-    let activeLesson = "";
-
-    // Testi Başlatma Fonksiyonu
-    function startQuiz(lesson) {
-        activeLesson = lesson;
-        const modal = document.getElementById('quizModal');
-        const container = document.getElementById('quizContainer');
-        const list = quizData[lesson] || quizData["Matematik"];
-        
-        container.innerHTML = "";
-        document.getElementById('resultText').innerText = "";
-        
-        list.forEach((item, i) => {
-            let html = `<div class="q-box"><p><b>${i+1}. ${item.q}</b></p>`;
-            item.a.forEach((opt, idx) => {
-                html += `<label style="display:block; margin:5px 0;"><input type="radio" name="q${i}" value="${idx}"> ${opt}</label>`;
-            });
-            html += `</div>`;
-            container.innerHTML += html;
-        });
-        modal.style.display = 'block';
-    }
-
-    // Modal Kapatma
-    function closeModal() { 
-        document.getElementById('quizModal').style.display = 'none'; 
-    }
-
-    // Sonuç Hesaplama
-    function calcResult() {
-        const list = quizData[activeLesson] || quizData["Matematik"];
-        let score = 0;
-        list.forEach((item, i) => {
-            const sel = document.querySelector(`input[name="q${i}"]:checked`);
-            if(sel && parseInt(sel.value) === item.c) score++;
-        });
-        document.getElementById('resultText').innerText = `Sonuç: 5 soruda ${score} doğru!`;
-    }
-</script>
-
-</body>
-</html>
-<div class="game-section" style="background: #111; color: white; padding: 30px; border-radius: 20px; margin-top: 50px; text-align: center; border: 2px solid #3498db;">
+   <div class="game-section" style="background: #111; color: white; padding: 30px; border-radius: 20px; margin-top: 50px; text-align: center; border: 2px solid #3498db;">
     <h2 style="color: #3498db; border: none; margin-bottom: 20px;">🎮 Mola Zamanı: Mini Pac-Man</h2>
     
     <canvas id="pacmanCanvas" width="400" height="400" style="background: #000; border: 2px solid #444; border-radius: 10px;"></canvas>
@@ -1022,15 +980,15 @@
 </div>
 
 <script>
-    // Çakışmaları önlemek için her şeyi bir fonksiyon içine alıyoruz
     (function() {
         window.addEventListener('load', function() {
             const canvas = document.getElementById("pacmanCanvas");
             const ctx = canvas.getContext("2d");
             const startBtn = document.getElementById("singleStartBtn");
 
-            let player = { x: 200, y: 200, s: 15, spd: 5 };
-            let ghost = { x: 50, y: 50, s: 15, spd: 2.5 };
+            // Karakter hızını 10 yaptım, hayalet hızını 3 olarak dengeledim
+            let player = { x: 200, y: 200, s: 15, spd: 10 };
+            let ghost = { x: 50, y: 50, s: 15, spd: 3 };
             let gameActive = false;
             let animationId;
 
@@ -1040,21 +998,21 @@
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Hayalet takibi
+                // Hayalet takibi (Mantıksal takip)
                 let dx = player.x - ghost.x;
                 let dy = player.y - ghost.y;
                 let angle = Math.atan2(dy, dx);
                 ghost.x += Math.cos(angle) * ghost.spd;
                 ghost.y += Math.sin(angle) * ghost.spd;
 
-                // Pac-Man çizimi
+                // Pac-Man Çizimi
                 ctx.fillStyle = "#f1c40f";
                 ctx.beginPath();
                 ctx.arc(player.x, player.y, player.s, 0.2 * Math.PI, 1.8 * Math.PI);
                 ctx.lineTo(player.x, player.y);
                 ctx.fill();
 
-                // Hayalet çizimi
+                // Hayalet Çizimi
                 ctx.fillStyle = "#e74c3c";
                 ctx.beginPath();
                 ctx.arc(ghost.x, ghost.y, ghost.s, 0, 2 * Math.PI);
@@ -1065,11 +1023,12 @@
                 if (distance < (player.s + ghost.s)) {
                     gameActive = false;
                     cancelAnimationFrame(animationId);
-                    alert("YAKALANDIN! 👻");
+                    alert("HAYALET SENİ YAKALADI! 👻");
+                    startBtn.innerText = "TEKRAR DENE";
                     return;
                 }
 
-                // Sınırlar
+                // Ekran Sınırları (Dışarı çıkmayı engeller)
                 if(player.x < 15) player.x = 15; if(player.x > 385) player.x = 385;
                 if(player.y < 15) player.y = 15; if(player.y > 385) player.y = 385;
 
@@ -1078,8 +1037,8 @@
 
             startBtn.addEventListener("click", function() {
                 gameActive = true;
-                player = { x: 200, y: 200, s: 15, spd: 5 };
-                ghost = { x: 50, y: 50, s: 15, spd: 2.5 };
+                player = { x: 200, y: 200, s: 15, spd: 10 };
+                ghost = { x: 50, y: 50, s: 15, spd: 3 };
                 if(animationId) cancelAnimationFrame(animationId);
                 update();
                 startBtn.innerText = "OYUNU YENİLE";
@@ -1092,6 +1051,7 @@
                 if (e.key === "ArrowLeft") player.x -= player.spd;
                 if (e.key === "ArrowRight") player.x += player.spd;
                 
+                // Ok tuşlarının sayfayı kaydırmasını önle
                 if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
                     e.preventDefault();
                 }
@@ -1099,50 +1059,3 @@
         });
     })();
 </script>
-
-// 3. MİNİ PAC-MAN OYUNU
-    let canvas = document.getElementById("pacmanCanvas");
-    let ctx = canvas.getContext("2d");
-    
-    // player.spd değerini 10 yaptım (Eskisi 5 idi)
-    let player = { x: 200, y: 200, s: 15, spd: 10 }; 
-    
-    // Hayalet hızını da biraz artırdım ki oyun çok kolay olmasın
-    let ghost = { x: 30, y: 30, s: 15, spd: 3 }; 
-    
-    let gameActive = false;
-
-    function startPacman() {
-        gameActive = true;
-        player.x = 200; player.y = 200;
-        ghost.x = 30; ghost.y = 30;
-        runGame();
-    }
-
-    function runGame() {
-        if(!gameActive) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Hayalet Takibi
-        if (ghost.x < player.x) ghost.x += ghost.spd; else ghost.x -= ghost.spd;
-        if (ghost.y < player.y) ghost.y += ghost.spd; else ghost.y -= ghost.spd;
-
-        // Pacman Çizimi
-        ctx.fillStyle = "yellow";
-        ctx.beginPath();
-        ctx.arc(player.x, player.y, player.s, 0.9 * Math.PI, 1.8 * Math.PI);
-        ctx.lineTo(player.x, player.y);
-        ctx.fill();
-
-        // Hayalet Çizimi
-        ctx.fillStyle = "red";
-        ctx.fillRect(ghost.x - 7, ghost.y - 7, 15, 15);
-
-        // Çarpışma
-        let dist = Math.hypot(player.x - ghost.x, player.y - ghost.y);
-        if(dist < 20) {
-            alert("Hayalet Seni Yakaladı! 👻");
-            gameActive = false;
-        }
-        requestAnimationFrame(runGame);
-    }
