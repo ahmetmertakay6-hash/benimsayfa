@@ -639,3 +639,167 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitim Portalı</title>
+    <style>
+        :root { --primary: #3498db; --secondary: #e67e22; --success: #2ecc71; --danger: #e74c3c; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        h2 { color: #2c3e50; border-left: 5px solid var(--primary); padding-left: 10px; }
+
+        /* Kart Düzeni */
+        .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .class-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); }
+        .lise { border-top-color: var(--secondary); }
+
+        /* Ders Butonları */
+        .lesson-btn { 
+            width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ddd; 
+            background: #fff; border-radius: 8px; cursor: pointer; text-align: left; font-weight: bold; transition: 0.3s;
+        }
+        .lesson-btn:hover { background: #f0f4f8; border-color: var(--primary); }
+
+        /* Açılır İçerik Paneli */
+        .content-panel { 
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; 
+            background: #fafafa; border-radius: 0 0 8px 8px; padding: 0 15px; 
+        }
+        .active-panel { padding: 15px; border: 1px solid #eee; border-top: none; }
+
+        /* Link Butonları */
+        .action-links { display: flex; gap: 10px; margin-top: 10px; }
+        .btn { padding: 8px 15px; border-radius: 5px; text-decoration: none; color: white; font-size: 13px; font-weight: bold; }
+        .video-btn { background: var(--danger); }
+        .test-btn { background: var(--success); }
+
+        /* Modal (Test Penceresi) */
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
+        .modal-body { background: white; width: 90%; max-width: 500px; margin: 50px auto; padding: 25px; border-radius: 15px; position: relative; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; }
+        .q-box { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        #finish-btn { background: var(--primary); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📚 Sınıf Seviyeleri ve Kaynaklar</h2>
+    <p>Ders seçimi yapın, notlara ve videolara anında ulaşın:</p>
+
+    <div class="class-grid">
+        <div class="class-card">
+            <h3>5. Sınıf</h3>
+            <button class="lesson-btn" onclick="toggleAccordion(this)">📘 Matematik</button>
+            <div class="content-panel">
+                <p><b>Ders Notu:</b> Doğal sayılar okunuşu ve basamak değerleri konusunu kapsar.</p>
+                <div class="action-links">
+                    <a href="https://www.youtube.com/results?search_query=5.+sınıf+matematik" target="_blank" class="btn video-btn">🎥 İzle</a>
+                    <a href="javascript:void(0)" onclick="startQuiz('Matematik')" class="btn test-btn">✍️ Test Çöz</a>
+                </div>
+            </div>
+
+            <button class="lesson-btn" onclick="toggleAccordion(this)">🧪 Fen Bilimleri</button>
+            <div class="content-panel">
+                <p><b>Ders Notu:</b> Ay'ın evreleri ve Güneş'in yapısı hakkında bilgiler.</p>
+                <div class="action-links">
+                    <a href="https://www.youtube.com/results?search_query=5.+sınıf+fen" target="_blank" class="btn video-btn">🎥 İzle</a>
+                    <a href="javascript:void(0)" onclick="startQuiz('Fen')" class="btn test-btn">✍️ Test Çöz</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="class-card">
+            <h3>8. Sınıf (LGS)</h3>
+            <button class="lesson-btn" onclick="toggleAccordion(this)">📐 Matematik</button>
+            <div class="content-panel">
+                <p><b>Ders Notu:</b> Çarpanlar ve Katlar, Üslü Sayılar LGS hazırlık notları.</p>
+                <div class="action-links">
+                    <a href="#" class="btn video-btn">🎥 İzle</a>
+                    <a href="javascript:void(0)" onclick="startQuiz('LGS_Mat')" class="btn test-btn">✍️ Test Çöz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="quizModal" class="modal">
+    <div class="modal-body">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="quizTitle">Test</h3>
+        <div id="quizContainer"></div>
+        <button id="finish-btn" onclick="calcResult()">Testi Bitir</button>
+        <p id="resultText" style="margin-top:15px; font-weight:bold; color:green; text-align:center;"></p>
+    </div>
+</div>
+
+<script>
+    // Açılır kapanır kutu fonksiyonu
+    function toggleAccordion(btn) {
+        const panel = btn.nextElementSibling;
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+            panel.classList.remove('active-panel');
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.classList.add('active-panel');
+        }
+    }
+
+    // Test Verileri
+    const questions = {
+        "Matematik": [
+            { q: "100 sayısının %20'si kaçtır?", a: ["10", "20", "30"], c: 1 },
+            { q: "En küçük çift asal sayı?", a: ["0", "2", "4"], c: 1 },
+            { q: "3'ün karesi kaçtır?", a: ["6", "9", "12"], c: 1 },
+            { q: "Hangi sayı tektir?", a: ["2", "5", "8"], c: 1 },
+            { q: "10 x 10 kaçtır?", a: ["10", "100", "1000"], c: 1 }
+        ],
+        "Fen": [
+            { q: "Hangisi bir gezegendir?", a: ["Ay", "Mars", "Güneş"], c: 1 },
+            { q: "Su kaç derecede donar?", a: ["0", "10", "100"], c: 0 },
+            { q: "Dünya'nın uydusu hangisidir?", a: ["Güneş", "Jüpiter", "Ay"], c: 2 },
+            { q: "Hangisi canlıdır?", a: ["Taş", "Kedi", "Bulut"], c: 1 },
+            { q: "Işık kaynağımız hangisidir?", a: ["Ay", "Güneş", "Mars"], c: 1 }
+        ]
+    };
+
+    let currentLesson = "";
+
+    function startQuiz(lesson) {
+        currentLesson = lesson;
+        const container = document.getElementById('quizContainer');
+        const list = questions[lesson] || questions["Matematik"];
+        container.innerHTML = "";
+        document.getElementById('resultText').innerText = "";
+        
+        list.forEach((item, i) => {
+            let qHtml = `<div class="q-box"><p>${i+1}. ${item.q}</p>`;
+            item.a.forEach((opt, index) => {
+                qHtml += `<label><input type="radio" name="q${i}" value="${index}"> ${opt}</label><br>`;
+            });
+            qHtml += `</div>`;
+            container.innerHTML += qHtml;
+        });
+        document.getElementById('quizModal').style.display = 'block';
+    }
+
+    function closeModal() { document.getElementById('quizModal').style.display = 'none'; }
+
+    function calcResult() {
+        const list = questions[currentLesson] || questions["Matematik"];
+        let score = 0;
+        list.forEach((item, i) => {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if(selected && parseInt(selected.value) === item.c) score++;
+        });
+        document.getElementById('resultText').innerText = `Sonuç: 5 soruda ${score} doğru!`;
+    }
+</script>
+
+</body>
+</html>
