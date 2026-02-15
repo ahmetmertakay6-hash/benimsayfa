@@ -927,7 +927,8 @@
 </div>
 
 <script>
-    // 1. AKORDİYON SİSTEMİ
+ <script>
+    // 1. AKORDİYON SİSTEMİ (Ders Notlarını Açma/Kapama)
     function toggleAccordion(btn) {
         const panel = btn.nextElementSibling;
         if (panel.style.maxHeight) {
@@ -965,6 +966,8 @@
     };
 
     let activeLesson = "";
+
+    // Testi Başlatma Fonksiyonu
     function startQuiz(lesson) {
         activeLesson = lesson;
         const modal = document.getElementById('quizModal');
@@ -985,8 +988,12 @@
         modal.style.display = 'block';
     }
 
-    function closeModal() { document.getElementById('quizModal').style.display = 'none'; }
+    // Modal Kapatma
+    function closeModal() { 
+        document.getElementById('quizModal').style.display = 'none'; 
+    }
 
+    // Sonuç Hesaplama
     function calcResult() {
         const list = quizData[activeLesson] || quizData["Matematik"];
         let score = 0;
@@ -996,60 +1003,7 @@
         });
         document.getElementById('resultText').innerText = `Sonuç: 5 soruda ${score} doğru!`;
     }
-
-    // 3. MİNİ PAC-MAN OYUNU
-    let canvas = document.getElementById("pacmanCanvas");
-    let ctx = canvas.getContext("2d");
-    let player = { x: 200, y: 200, s: 15, spd: 5 };
-    let ghost = { x: 30, y: 30, s: 15, spd: 2 };
-    let gameActive = false;
-
-    function startPacman() {
-        gameActive = true;
-        player.x = 200; player.y = 200;
-        ghost.x = 30; ghost.y = 30;
-        runGame();
-    }
-
-    function runGame() {
-        if(!gameActive) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Hayalet Takibi
-        if (ghost.x < player.x) ghost.x += ghost.spd; else ghost.x -= ghost.spd;
-        if (ghost.y < player.y) ghost.y += ghost.spd; else ghost.y -= ghost.spd;
-
-        // Pacman Çizimi
-        ctx.fillStyle = "yellow";
-        ctx.beginPath();
-        ctx.arc(player.x, player.y, player.s, 0.2 * Math.PI, 1.8 * Math.PI);
-        ctx.lineTo(player.x, player.y);
-        ctx.fill();
-
-        // Hayalet Çizimi
-        ctx.fillStyle = "red";
-        ctx.fillRect(ghost.x - 7, ghost.y - 7, 15, 15);
-
-        // Çarpışma
-        let dist = Math.hypot(player.x - ghost.x, player.y - ghost.y);
-        if(dist < 20) {
-            alert("Hayalet Seni Yakaladı! 👻");
-            gameActive = false;
-        }
-        requestAnimationFrame(runGame);
-    }
-
-    window.addEventListener("keydown", (e) => {
-        if(e.key === "ArrowUp") player.y -= player.spd;
-        if(e.key === "ArrowDown") player.y += player.spd;
-        if(e.key === "ArrowLeft") player.x -= player.spd;
-        if(e.key === "ArrowRight") player.x += player.spd;
-    });
 </script>
 
 </body>
 </html>
-
-                                  
-
-
